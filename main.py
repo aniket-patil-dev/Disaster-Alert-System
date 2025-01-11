@@ -6,8 +6,9 @@ import json
 
 load_dotenv()
 
+# Retrieves data from Api
 def pull_earthquake_data():
-    url = os.getenv('earthquake_api_link')
+    url = os.getenv('earthquake_api_link') # fetches url from env variable
     params = {
         "format": "geojson",
         "starttime": "2025-01-01",
@@ -16,10 +17,28 @@ def pull_earthquake_data():
 
     response = requests.get(url=url, params=params)
     if response.status_code == 200:
-        with open(f"earthquake_data-{datetime.datetime.now().date()}-{datetime.datetime.now().time()}.json", "w", encoding='utf-8') as my_file:
-            json.dump(response.json(), my_file)
-        print("Data Successfully stored")
+        return response.json()
     else:
         raise Exception("Failed to fetch data!")
 
-pull_earthquake_data()
+# Separates unwanted data
+def parse_earthquake_data(data):
+    parsed_data = [] # Empty list
+    for feature in data['features']:
+        earthquake = {
+            "magnitude": feature['properties']['mag'],
+            "location": feature['properties']['place'],
+            "time": datetime.datetime.utcfromtimestamp(feature['properties']['time'] / 1000).strftime('%Y-%m-%d %H:%M:%S'),
+            "coordinates": feature['geometry']['coordinates'],
+            "url": feature['properties']['url']
+        }
+        parsed_data.append(earthquake)
+    return parsed_data
+
+# Fetches data over specified parameters
+def filter_significant_data():
+    pass
+
+# Code Assembly/ Integration
+def main():
+    pass
