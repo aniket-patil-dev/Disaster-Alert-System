@@ -2,7 +2,6 @@ import requests
 from dotenv import load_dotenv
 import os
 import datetime
-import json
 
 load_dotenv()
 
@@ -11,17 +10,17 @@ def pull_earthquake_data():
     url = os.getenv('earthquake_api_link') # fetches url from env variable
     params = {
         "format": "geojson",
-        "starttime": "2025-01-01",
+        "starttime": "2024-01-01",
         "minmagnitude": 5.0
     }
 
-    response = requests.get(url=url, params=params)
-    if response.status_code == 200:
-        return response.json()
+    response = requests.get(url=url, params=params) # making actual request
+    if response.status_code == 200: # check if request was successful
+        return response.json() # returns data in json format if the request was successful
     else:
-        raise Exception("Failed to fetch data!")
+        raise Exception("Failed to fetch data!") # throws error is request failed.
 
-# Separates unwanted data
+# Separates unwanted data and reformats data and time to human-readable format
 def parse_earthquake_data(data):
     parsed_data = [] # Empty list
     for feature in data['features']:
@@ -36,9 +35,26 @@ def parse_earthquake_data(data):
     return parsed_data
 
 # Fetches data over specified parameters
-def filter_significant_data():
-    pass
+def filter_significant_data(parsed_data, min_magnitude=6.0):
+    significant_only_data = []
+
+    # to check all entries for specified parameters
+    for earthquakes in parsed_data:
+        if earthquakes["magnitude"] >= min_magnitude:
+            significant_only_data.append(earthquakes)
+
+    return significant_only_data
 
 # Code Assembly/ Integration
 def main():
-    pass
+    raw_data = pull_earthquake_data()
+    parsed_data = parse_earthquake_data(raw_data)
+    filtered_data = filter_significant_data(parsed_data)
+    for earthquake in filtered_data:
+        print(f"Earthquake Alert!\n"
+              f"Magnitude: {earthquake['magnitude']}\n"
+              f"Location: {earthquake['location']}\n"
+              f"Time: {earthquake['time']}\n"
+              f"Details: {earthquake['url']}")
+
+main()
