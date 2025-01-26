@@ -47,14 +47,23 @@ def filter_significant_data(parsed_data, min_magnitude=6.0):
 
 # Code Assembly/ Integration
 def main():
-    raw_data = pull_earthquake_data()
-    parsed_data = parse_earthquake_data(raw_data)
-    filtered_data = filter_significant_data(parsed_data)
-    for earthquake in filtered_data:
-        print(f"Earthquake Alert!\n"
-              f"Magnitude: {earthquake['magnitude']}\n"
-              f"Location: {earthquake['location']}\n"
-              f"Time: {earthquake['time']}\n"
-              f"Details: {earthquake['url']}")
+    try:
+        raw_data = pull_earthquake_data()
+        parsed_data = parse_earthquake_data(raw_data)
+        filtered_data = filter_significant_data(parsed_data, min_magnitude=6.0)
+
+        if not filtered_data:
+            print("No significant earthquakes recorded.")
+        else:
+            for earthquake in filtered_data:
+                print("=" * 40)
+                print(f"Earthquake Alert!")
+                print(f"Magnitude: {earthquake['magnitude']}")
+                print(f"Location: {earthquake['location']}")
+                print(f"Time: {earthquake['time']}")
+                print(f"Details: {earthquake['url']}")
+                print("=" * 40)
+    except Exception as e:
+        print(f"Error: {e}")
 
 main()
