@@ -74,7 +74,13 @@ SNS_TOPIC_ARN=arn:aws:sns:region:account-id:your-sns-topic
    - `AmazonSNSFullAccess`
    - `AWSLambdaBasicExecutionRole`
 
-### 4️⃣ Schedule Lambda Execution using CloudWatch Events
+### 4️⃣ Add a Layer for the Requests Module
+1. Go to your AWS Lambda function.
+2. Navigate to the **Layers** section and click **Add a Layer**.
+3. Choose **Custom Layer** and select a layer that includes the `requests` module.
+4. If a layer is not available, create a zip package with `requests`, upload it to S3, and add it as a Lambda layer.
+
+### 5️⃣ Schedule Lambda Execution using CloudWatch Events
 1. Go to **Amazon EventBridge** → Create a Rule
 2. Set the schedule to **every 1 minute** (`rate(1 minute)`)
 3. Choose **Lambda function** as the target and select your function.
