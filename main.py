@@ -10,8 +10,7 @@ def pull_earthquake_data():
     url = os.getenv('earthquake_api_link') # fetches url from env variable
     params = {
         "format": "geojson",
-        "starttime": "2024-01-01",
-        "minmagnitude": 5.0
+        "starttime": "2025-01-25",
     }
 
     response = requests.get(url=url, params=params) # making actual request
@@ -49,8 +48,9 @@ def filter_significant_data(parsed_data, min_magnitude=6.0):
 def main():
     try:
         raw_data = pull_earthquake_data()
+        print(raw_data[0])
         parsed_data = parse_earthquake_data(raw_data)
-        filtered_data = filter_significant_data(parsed_data, min_magnitude=6.0)
+        filtered_data = filter_significant_data(parsed_data, min_magnitude=3.0)
 
         if not filtered_data:
             print("No significant earthquakes recorded.")
