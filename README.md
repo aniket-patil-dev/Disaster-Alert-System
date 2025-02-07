@@ -1,4 +1,4 @@
-# 🌍 Real-Time Earthquake Alert System using AWS Lambda, S3 & SNS
+# 🌍 Real-Time Earthquake Alert System
 
 ## 📌 Overview
 This project is a **serverless earthquake alert system** built using **AWS Lambda**, **Amazon S3**, **Amazon SNS**, and **CloudWatch Events**. It fetches real-time earthquake data from the **USGS API**, processes it, filters new events, and sends alerts via **AWS SNS** to notify users.
